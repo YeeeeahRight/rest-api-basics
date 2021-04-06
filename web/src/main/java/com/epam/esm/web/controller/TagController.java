@@ -1,13 +1,12 @@
-package com.epam.esm.controller;
+package com.epam.esm.web.controller;
 
-import com.epam.esm.entity.Tag;
-import com.epam.esm.service.TagService;
+import com.epam.esm.persistence.entity.Tag;
+import com.epam.esm.service.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -33,16 +32,16 @@ public class TagController {
         return tagService.getAll();
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Tag getById(@PathVariable("id") int id) {
+    public Tag getById(@PathVariable("id") long id) {
         return tagService.getById(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable("id") int id) {
+    public void deleteById(@PathVariable("id") long id) {
         tagService.deleteById(id);
     }
 }

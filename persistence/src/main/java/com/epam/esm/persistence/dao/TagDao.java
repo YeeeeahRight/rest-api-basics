@@ -1,14 +1,14 @@
-package com.epam.esm.dao;
+package com.epam.esm.persistence.dao;
 
-import com.epam.esm.entity.Tag;
+import com.epam.esm.persistence.entity.Tag;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface TagDao {
     void create(Tag tag);
 
-    Set<Tag> getAll();
+    List<Tag> getAll();
 
     Optional<Tag> findById(long id);
 

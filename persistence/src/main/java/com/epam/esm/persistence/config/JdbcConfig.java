@@ -1,4 +1,4 @@
-package com.epam.esm.config;
+package com.epam.esm.persistence.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-@ComponentScan("com.epam.esm")
 public class JdbcConfig {
 
     @Value("${dataSource.driverClassName}")

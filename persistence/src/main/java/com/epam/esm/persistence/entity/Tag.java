@@ -1,4 +1,4 @@
-package com.epam.esm.entity;
+package com.epam.esm.persistence.entity;
 
 public class Tag {
     private long id;
@@ -46,5 +46,13 @@ public class Tag {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -1,6 +1,6 @@
-package com.epam.esm.service;
+package com.epam.esm.service.service;
 
-import com.epam.esm.entity.Tag;
+import com.epam.esm.persistence.entity.Tag;
 
 import java.util.Set;
 

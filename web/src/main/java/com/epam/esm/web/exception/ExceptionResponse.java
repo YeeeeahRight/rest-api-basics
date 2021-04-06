@@ -1,11 +1,9 @@
-package com.epam.esm.exception;
+package com.epam.esm.web.exception;
 
 public class ExceptionResponse {
-    private String errorMessage;
-    private int errorCode;
+    private final String errorMessage;
+    private final int errorCode;
 
-    public ExceptionResponse() {
-    }
 
     public ExceptionResponse(String errorMessage, int errorCode) {
         this.errorMessage = errorMessage;

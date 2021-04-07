@@ -10,11 +10,11 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getAll();
 
-    List<GiftCertificate> search(String tagName, String partInfo, List<String> sortTypes);
+    List<GiftCertificateDto> getAllWithTags(String tagName, String partInfo, List<String> sortTypes);
 
     GiftCertificate getById(long id);
 
-    GiftCertificate updateById(long id, GiftCertificate giftCertificate);
+    GiftCertificateDto updateById(long id, GiftCertificateDto giftCertificate);
 
     void deleteById(long id);
 }

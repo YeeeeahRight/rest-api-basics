@@ -1,5 +1,6 @@
 package com.epam.esm.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,6 +23,7 @@ public class GiftCertificate {
     private ZonedDateTime lastUpdateDate;
     private int duration;
 
+    @JsonCreator
     public GiftCertificate() {
     }
 

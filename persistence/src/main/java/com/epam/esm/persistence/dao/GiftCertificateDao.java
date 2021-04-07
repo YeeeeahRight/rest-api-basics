@@ -3,6 +3,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.persistence.entity.GiftCertificate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface GiftCertificateDao {
@@ -12,7 +13,9 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> getAll();
 
-    void updateById(long id, GiftCertificate giftCertificate);
+    List<Long> getCertificateTagIds(long certificateId);
+
+    void updateById(long id, Map<String, Object> giftCertificateUpdateInfo);
 
     Optional<GiftCertificate> findById(long id);
 

@@ -22,9 +22,16 @@ public class GiftCertificateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody GiftCertificateDto giftCertificateDto, HttpServletResponse response) {
+    public void create(@RequestBody GiftCertificateDto giftCertificateDto,
+                       HttpServletResponse response) {
         long id = giftCertificateService.create(giftCertificateDto);
         response.addHeader("Location:", "/certificates/" + id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<GiftCertificate> getAll() {
+        return giftCertificateService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -34,23 +41,18 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("/{id}")
-    public GiftCertificate updateById(@PathVariable("id") long id,
-                                      @RequestBody GiftCertificate giftCertificate) {
-        return giftCertificateService.updateById(id, giftCertificate);
+    public GiftCertificateDto updateById(@PathVariable("id") long id,
+                                      @RequestBody GiftCertificateDto giftCertificateDto) {
+        return giftCertificateService.updateById(id, giftCertificateDto);
     }
 
-    @GetMapping
+    @GetMapping("/withTags")
     @ResponseStatus(HttpStatus.OK)
-    public List<GiftCertificate> getAll() {
-        return giftCertificateService.getAll();
-    }
-
-    @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public List<GiftCertificate> search(@RequestParam(required = false, defaultValue = "") String tagName,
-                       @RequestParam(required = false, defaultValue = "") String partInfo,
-                       @RequestParam(required = false) List<String> sortTypes) {
-        return giftCertificateService.search(tagName, partInfo, sortTypes);
+    public List<GiftCertificateDto> getAllWithTags(
+            @RequestParam(required = false, defaultValue = "") String tagName,
+            @RequestParam(required = false, defaultValue = "") String partInfo,
+            @RequestParam(required = false) List<String> sortTypes) {
+        return giftCertificateService.getAllWithTags(tagName, partInfo, sortTypes);
     }
 
     @DeleteMapping("/{id}")

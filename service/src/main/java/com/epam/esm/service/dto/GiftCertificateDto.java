@@ -2,13 +2,16 @@ package com.epam.esm.service.dto;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
 import com.epam.esm.persistence.entity.Tag;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class GiftCertificateDto {
     private GiftCertificate giftCertificate;
-    private Set<Tag> tags;
+    private Set<Tag> certificateTags = new HashSet<>();
 
+    @JsonCreator
     public GiftCertificateDto() {
     }
 
@@ -24,19 +27,23 @@ public class GiftCertificateDto {
         this.giftCertificate = giftCertificate;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
+    public Set<Tag> getCertificateTags() {
+        return certificateTags;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setCertificateTags(Set<Tag> certificateTags) {
+        this.certificateTags = certificateTags;
+    }
+
+    public void addTag(Tag tag) {
+        this.certificateTags.add(tag);
     }
 
     @Override
     public String toString() {
         return "GiftCertificateDto{" +
                 "giftCertificate=" + giftCertificate +
-                ", tags=" + tags +
+                ", tags=" + certificateTags +
                 '}';
     }
 }

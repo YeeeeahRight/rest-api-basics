@@ -1,11 +1,12 @@
 package com.epam.esm.service.service;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
+import com.epam.esm.service.dto.GiftCertificateDto;
 
 import java.util.List;
 
 public interface GiftCertificateService {
-    long create(GiftCertificate giftCertificate);
+    long create(GiftCertificateDto giftCertificate);
 
     List<GiftCertificate> getAll();
 

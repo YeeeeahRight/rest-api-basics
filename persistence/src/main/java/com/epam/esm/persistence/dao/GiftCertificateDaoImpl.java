@@ -13,6 +13,8 @@ import java.util.Optional;
 public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements GiftCertificateDao {
     private static final String CREATE_QUERY = "INSERT INTO certificate" +
             "(name, description, price, duration) VALUES (?, ?, ?, ?)";
+    private static final String CREATE_CERTIFICATE_TAG_REFERENCE = "INSERT INTO " +
+            "certificate_tag(certificate_id, tag_id) VALUES (?, ?)";
     private static final RowMapper<GiftCertificate> ROW_MAPPER =
             new BeanPropertyRowMapper<>(GiftCertificate.class);
 
@@ -29,6 +31,11 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
         jdbcTemplate.update(CREATE_QUERY, giftCertificate.getName(),
                 giftCertificate.getDescription(), giftCertificate.getPrice(),
                 giftCertificate.getDuration());
+    }
+
+    @Override
+    public void createCertificateTagReference(long certificateId, long tagId) {
+       jdbcTemplate.update(CREATE_CERTIFICATE_TAG_REFERENCE, certificateId, tagId);
     }
 
     @Override

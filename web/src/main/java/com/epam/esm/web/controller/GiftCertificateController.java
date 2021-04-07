@@ -1,6 +1,7 @@
 package com.epam.esm.web.controller;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
+import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class GiftCertificateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody GiftCertificate giftCertificate, HttpServletResponse response) {
-        long id = giftCertificateService.create(giftCertificate);
+    public void create(@RequestBody GiftCertificateDto giftCertificateDto, HttpServletResponse response) {
+        long id = giftCertificateService.create(giftCertificateDto);
         response.addHeader("Location:", "/certificates/" + id);
     }
 

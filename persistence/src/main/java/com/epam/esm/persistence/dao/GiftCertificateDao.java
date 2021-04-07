@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface GiftCertificateDao {
     void create(GiftCertificate giftCertificate);
 
+    void createCertificateTagReference(long certificateId, long tagId);
+
     List<GiftCertificate> getAll();
 
     void updateById(long id, GiftCertificate giftCertificate);

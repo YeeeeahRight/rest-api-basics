@@ -1,5 +1,8 @@
 package com.epam.esm.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -9,7 +12,13 @@ public class GiftCertificate {
     private String name;
     private String description;
     private BigDecimal price;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private ZonedDateTime createDate;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private ZonedDateTime lastUpdateDate;
     private int duration;
 

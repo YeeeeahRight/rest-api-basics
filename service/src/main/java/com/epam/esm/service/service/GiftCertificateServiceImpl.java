@@ -2,6 +2,7 @@ package com.epam.esm.service.service;
 
 import com.epam.esm.persistence.dao.GiftCertificateDao;
 import com.epam.esm.persistence.entity.GiftCertificate;
+import com.epam.esm.service.exception.DuplicateEntityException;
 import com.epam.esm.service.exception.InvalidEntityException;
 import com.epam.esm.service.exception.NoSuchEntityException;
 import com.epam.esm.service.validator.EntityValidator;
@@ -31,6 +32,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new InvalidEntityException("Invalid gift certificate data.");
         }
         String certificateName = giftCertificate.getName();
+        boolean isCertificateExist = giftCertificateDao.findByName(certificateName).isPresent();
+        if (isCertificateExist) {
+            throw new DuplicateEntityException("Certificate with name=" +
+                    certificateName + " is already exist.");
+        }
         giftCertificateDao.create(giftCertificate);
         Optional<GiftCertificate> optionalCertificate = giftCertificateDao.findByName(certificateName);
         return optionalCertificate.map(GiftCertificate::getId).orElse(-1L);

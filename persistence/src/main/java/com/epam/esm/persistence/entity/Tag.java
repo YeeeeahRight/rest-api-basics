@@ -1,6 +1,9 @@
 package com.epam.esm.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Tag {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
     private String name;
 

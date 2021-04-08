@@ -1,4 +1,4 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.logic;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
 import com.epam.esm.service.dto.GiftCertificateDto;
@@ -10,7 +10,8 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getAll();
 
-    List<GiftCertificateDto> getAllWithTags(String tagName, String partInfo, List<String> sortTypes);
+    List<GiftCertificateDto> getAllWithTags(String tagName, String partInfo,
+                                            List<String> sortColumns, List<String> orderTypes);
 
     GiftCertificate getById(long id);
 

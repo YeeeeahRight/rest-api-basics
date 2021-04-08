@@ -4,7 +4,7 @@ import com.epam.esm.persistence.entity.Tag;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TagValidator implements EntityValidator<Tag> {
+public class TagValidator implements Validator<Tag> {
     private static final int NAME_MAX_LENGTH = 60;
     private static final int NAME_MIN_LENGTH = 1;
 

@@ -1,4 +1,4 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.logic;
 
 import com.epam.esm.persistence.entity.Tag;
 

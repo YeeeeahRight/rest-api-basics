@@ -1,11 +1,11 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.logic;
 
 import com.epam.esm.persistence.dao.TagDao;
 import com.epam.esm.persistence.entity.Tag;
 import com.epam.esm.service.exception.InvalidEntityException;
 import com.epam.esm.service.exception.NoSuchEntityException;
 import com.epam.esm.service.exception.DuplicateEntityException;
-import com.epam.esm.service.validator.EntityValidator;
+import com.epam.esm.service.validator.Validator;
 import com.epam.esm.service.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
-    private final EntityValidator<Tag> tagValidator;
+    private final Validator<Tag> tagValidator;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao, TagValidator tagValidator) {

@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractDao<T> {
-    private final String getAllQuery;
-    private final String findByIdQuery;
-    private final String findByColumnQuery;
-    private final String deleteByIdQuery;
+    protected final String findByIdQuery;
+    protected final String findByColumnQuery;
+    protected final String deleteByIdQuery;
+    protected final String getAllQuery;
 
     private final RowMapper<T> rowMapper;
     private final JdbcTemplate jdbcTemplate;

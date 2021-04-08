@@ -2,7 +2,7 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
 import com.epam.esm.service.dto.GiftCertificateDto;
-import com.epam.esm.service.service.GiftCertificateService;
+import com.epam.esm.service.logic.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,18 +41,20 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public GiftCertificateDto updateById(@PathVariable("id") long id,
                                       @RequestBody GiftCertificateDto giftCertificateDto) {
         return giftCertificateService.updateById(id, giftCertificateDto);
     }
 
-    @GetMapping("/withTags")
+    @GetMapping("/with_tags")
     @ResponseStatus(HttpStatus.OK)
     public List<GiftCertificateDto> getAllWithTags(
-            @RequestParam(required = false, defaultValue = "") String tagName,
-            @RequestParam(required = false, defaultValue = "") String partInfo,
-            @RequestParam(required = false) List<String> sortTypes) {
-        return giftCertificateService.getAllWithTags(tagName, partInfo, sortTypes);
+            @RequestParam(name = "tag_name", required = false) String tagName,
+            @RequestParam(name = "part_info", required = false) String partInfo,
+            @RequestParam(name = "sort", required = false) List<String> sortColumns,
+            @RequestParam(name = "order", required = false) List<String> orderTypes) {
+        return giftCertificateService.getAllWithTags(tagName, partInfo, sortColumns, orderTypes);
     }
 
     @DeleteMapping("/{id}")

@@ -1,15 +1,13 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.logic;
 
 import com.epam.esm.persistence.dao.GiftCertificateDao;
 import com.epam.esm.persistence.dao.TagDao;
 import com.epam.esm.persistence.entity.GiftCertificate;
 import com.epam.esm.persistence.entity.Tag;
+import com.epam.esm.persistence.query.SortParameters;
 import com.epam.esm.service.dto.GiftCertificateDto;
-import com.epam.esm.service.exception.CreationEntityException;
-import com.epam.esm.service.exception.DuplicateEntityException;
-import com.epam.esm.service.exception.InvalidEntityException;
-import com.epam.esm.service.exception.NoSuchEntityException;
-import com.epam.esm.service.validator.EntityValidator;
+import com.epam.esm.service.exception.*;
+import com.epam.esm.service.validator.Validator;
 import com.epam.esm.service.validator.GiftCertificateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,17 +20,20 @@ import java.util.*;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
     private final TagDao tagDao;
-    private final EntityValidator<GiftCertificate> giftCertificateValidator;
-    private final EntityValidator<Tag> tagEntityValidator;
+    private final Validator<GiftCertificate> giftCertificateValidator;
+    private final Validator<Tag> tagEntityValidator;
+    private final Validator<SortParameters> sortParametersValidator;
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao,
-                                      EntityValidator<GiftCertificate> giftCertificateValidator,
-                                      EntityValidator<Tag> tagEntityValidator) {
+                                      Validator<GiftCertificate> giftCertificateValidator,
+                                      Validator<Tag> tagEntityValidator,
+                                      Validator<SortParameters> sortParametersValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
         this.giftCertificateValidator = giftCertificateValidator;
         this.tagEntityValidator = tagEntityValidator;
+        this.sortParametersValidator = sortParametersValidator;
     }
 
     @Override
@@ -93,9 +94,70 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional
     public List<GiftCertificateDto> getAllWithTags(String tagName, String partInfo,
-                                                   List<String> sortTypes) {
-        return null;
+                                                   List<String> sortColumns, List<String> orderTypes) {
+        List<GiftCertificateDto> giftCertificateDtoList = new ArrayList<>();
+        List<Long> giftCertificateIds;
+        boolean isSortExist = sortColumns != null;
+        if (isSortExist) {
+            giftCertificateIds = findSortedCertificateIds(tagName, partInfo, sortColumns, orderTypes);
+        } else if (isFilterExist(tagName, partInfo)) {
+            giftCertificateIds = findCertificateIdsWithFiltering(tagName, partInfo);
+        } else {
+            giftCertificateIds = convertToIds(giftCertificateDao.getAll());
+        }
+        for (long certificateId : giftCertificateIds) {
+            giftCertificateDtoList.add(buildGiftCertificateDto(certificateId));
+        }
+        return giftCertificateDtoList;
+    }
+
+    private boolean isFilterExist(String tagName, String partInfo) {
+        return tagName != null || partInfo != null;
+    }
+
+    private List<Long> findSortedCertificateIds(String tagName, String partInfo,
+                                                List<String> sortColumns, List<String> orderTypes) {
+        SortParameters sortParameters = new SortParameters(sortColumns, orderTypes);
+        validateSortParams(sortParameters);
+        List<Long> giftCertificateIds;
+        if (isFilterExist(tagName, partInfo)) {
+            List<Long> certificateIdsByTagName = null;
+            if (tagName != null) {
+                certificateIdsByTagName = findCertificateIdsByTagName(tagName);
+            }
+            giftCertificateIds = convertToIds(
+                    giftCertificateDao.getAllWithSortingFiltering(sortParameters,
+                            certificateIdsByTagName, partInfo));
+        } else {
+            giftCertificateIds = convertToIds(
+                    giftCertificateDao.getAllWithSorting(sortParameters));
+        }
+        return giftCertificateIds;
+    }
+
+    private List<Long> findCertificateIdsWithFiltering(String tagName, String partInfo) {
+        List<Long> certificateIdsByTagName = null;
+        if (tagName != null) {
+            certificateIdsByTagName = findCertificateIdsByTagName(tagName);
+        }
+        return convertToIds(giftCertificateDao.getAllWithFilter(certificateIdsByTagName, partInfo));
+    }
+
+    private List<Long> findCertificateIdsByTagName(String tagName) {
+        Optional<Tag> tag = tagDao.findByName(tagName);
+        if (!tag.isPresent()) {
+            throw new NoSuchEntityException("No tag with name=" + tagName);
+        }
+        long tagId = tag.get().getId();
+        return giftCertificateDao.getCertificateIdsByTagId(tagId);
+    }
+
+    private List<Long> convertToIds(List<GiftCertificate> giftCertificates) {
+        List<Long> giftCertificateIds = new ArrayList<>();
+        giftCertificates.forEach(giftCertificate -> giftCertificateIds.add(giftCertificate.getId()));
+        return giftCertificateIds;
     }
 
     @Override
@@ -152,7 +214,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             Optional<Tag> tagOptional = tagDao.findByName(tagName);
             Tag fullTag = tagOptional.orElseGet(() -> createCertificateTag(tag));
             long tagId = fullTag.getId();
-            if (!giftCertificateDao.getCertificateTagIds(certificateId).contains(tagId)) {
+            if (!giftCertificateDao.getTagIdsByCertificateId(certificateId).contains(tagId)) {
                 giftCertificateDao.createCertificateTagReference(certificateId, tagId);
             }
         }
@@ -167,12 +229,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate giftCertificate = giftCertificateOptional.get();
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto(giftCertificate);
         HashSet<Optional<Tag>> optionalTags = new HashSet<>();
-        List<Long> tagIds = giftCertificateDao.getCertificateTagIds(giftCertificate.getId());
+        List<Long> tagIds = giftCertificateDao.getTagIdsByCertificateId(giftCertificate.getId());
         tagIds.forEach(id -> optionalTags.add(tagDao.findById(id)));
         optionalTags.stream()
                 .filter(Optional::isPresent)
                 .forEach(tag -> giftCertificateDto.addTag(tag.get()));
-        System.out.println(giftCertificateDto);
         return giftCertificateDto;
     }
 
@@ -196,6 +257,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         boolean isCorrectTags = tags.stream().allMatch(tagEntityValidator::isValid);
         if (!isCorrectTags) {
             throw new InvalidEntityException("Invalid tags data.");
+        }
+    }
+
+    private void validateSortParams(SortParameters sortParameters) {
+        if (!sortParametersValidator.isValid(sortParameters)) {
+            throw new InvalidParametersException("Invalid sort parameters.");
         }
     }
 }

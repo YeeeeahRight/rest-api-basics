@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class GiftCertificateValidator implements EntityValidator<GiftCertificate> {
+public class GiftCertificateValidator implements Validator<GiftCertificate> {
     private static final int NAME_MAX_LENGTH = 80;
     private static final int NAME_MIN_LENGTH = 1;
     private static final int DESCRIPTION_MAX_LENGTH = 200;

@@ -1,6 +1,7 @@
 package com.epam.esm.persistence.dao;
 
 import com.epam.esm.persistence.entity.GiftCertificate;
+import com.epam.esm.persistence.query.SortParameters;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,16 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> getAll();
 
-    List<Long> getCertificateTagIds(long certificateId);
+    List<GiftCertificate> getAllWithSorting(SortParameters sortParameters);
+
+    List<GiftCertificate> getAllWithFilter(List<Long> ids, String partInfo);
+
+    List<GiftCertificate> getAllWithSortingFiltering(SortParameters sortParameters,
+                                                     List<Long> ids, String partInfo);
+
+    List<Long> getTagIdsByCertificateId(long certificateId);
+
+    List<Long> getCertificateIdsByTagId(long tagId);
 
     void updateById(long id, Map<String, Object> giftCertificateUpdateInfo);
 

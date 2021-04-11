@@ -45,16 +45,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         String certificateName = giftCertificate.getName();
         boolean isCertificateExist = giftCertificateDao.findByName(certificateName).isPresent();
         if (isCertificateExist) {
-            throw new DuplicateEntityException("Certificate with name=" +
-                    certificateName + " is already exist.");
+            throw new DuplicateEntityException("certificate.already.exist");
         }
         giftCertificateDao.create(giftCertificate);
-        Optional<GiftCertificate> optionalCertificate = giftCertificateDao.findByName(certificateName);
-        if (!optionalCertificate.isPresent()) {
-            throw new CreationEntityException(
-                    "Gift certificate was not created. Something went wrong.");
-        }
-        long certificateId = optionalCertificate.get().getId();
+        long certificateId = giftCertificateDao.findByName(certificateName).get().getId();
         createCertificateTagsWithReference(giftCertificateDto.getCertificateTags(), certificateId);
         return certificateId;
     }
@@ -71,12 +65,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private Tag createCertificateTag(Tag tag) {
         tagDao.create(tag);
-        Optional<Tag> tagOptional = tagDao.findByName(tag.getName());
-        if (!tagOptional.isPresent()) {
-            throw new CreationEntityException("" +
-                    "Tag with name=" + tag.getName() + " was not created. Something went wrong.");
-        }
-        return tagOptional.get();
+        return tagDao.findByName(tag.getName()).get();
     }
 
     @Override
@@ -88,7 +77,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificate getById(long id) {
         Optional<GiftCertificate> certificateOptional = giftCertificateDao.findById(id);
         if (!certificateOptional.isPresent()) {
-            throw new NoSuchEntityException("No gift certificate with id=" + id + ".");
+            throw new NoSuchEntityException("certificate.not.found");
         }
         return certificateOptional.get();
     }
@@ -144,7 +133,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private List<Long> findCertificateIdsByTagName(String tagName) {
         Optional<Tag> tag = tagDao.findByName(tagName);
         if (!tag.isPresent()) {
-            throw new NoSuchEntityException("No tag with name=" + tagName);
+            throw new NoSuchEntityException("tag.not.found");
         }
         long tagId = tag.get().getId();
         return giftCertificateDao.getCertificateIdsByTagId(tagId);
@@ -156,7 +145,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate giftCertificate = giftCertificateDto.getGiftCertificate();
         if (giftCertificate != null) {
             if (!giftCertificateDao.findById(id).isPresent()) {
-                throw new NoSuchEntityException("No gift certificate with id=" + id + ".");
+                throw new NoSuchEntityException("certificate.not.found");
             }
             giftCertificateDao.updateById(id, findUpdateInfo(giftCertificate));
         }
@@ -174,28 +163,28 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         String name = giftCertificate.getName();
         if (name != null) {
             if (!giftCertificateValidator.isNameValid(name)) {
-                throw new InvalidEntityException("Invalid gift certificate name.");
+                throw new InvalidEntityException("certificate.name.invalid");
             }
             updateInfo.put("name", name);
         }
         String description = giftCertificate.getDescription();
         if (description != null) {
             if (!giftCertificateValidator.isDescriptionValid(description)) {
-                throw new InvalidEntityException("Invalid gift certificate description.");
+                throw new InvalidEntityException("certificate.description.invalid");
             }
             updateInfo.put("description", description);
         }
         BigDecimal price = giftCertificate.getPrice();
         if (price != null) {
             if (!giftCertificateValidator.isPriceValid(price)) {
-                throw new InvalidEntityException("Invalid gift certificate price.");
+                throw new InvalidEntityException("certificate.price.invalid");
             }
             updateInfo.put("price", price);
         }
         int duration = giftCertificate.getDuration();
         if (duration != 0) {
             if (!giftCertificateValidator.isDurationValid(duration)) {
-                throw new InvalidEntityException("Invalid gift certificate duration.");
+                throw new InvalidEntityException("certificate.duration.invalid");
             }
             updateInfo.put("duration", duration);
         }
@@ -230,27 +219,27 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void deleteById(long id) {
         Optional<GiftCertificate> certificateOptional = giftCertificateDao.findById(id);
         if (!certificateOptional.isPresent()) {
-            throw new NoSuchEntityException("No gift certificate with id=" + id + ".");
+            throw new NoSuchEntityException("certificate.not.found");
         }
         giftCertificateDao.deleteById(id);
     }
 
     private void validateCertificate(GiftCertificate giftCertificate) {
         if (!giftCertificateValidator.isValid(giftCertificate)) {
-            throw new InvalidEntityException("Invalid gift certificate data.");
+            throw new InvalidEntityException("certificate.invalid");
         }
     }
 
     private void validateTags(Set<Tag> tags) {
         boolean isCorrectTags = tags.stream().allMatch(tagEntityValidator::isValid);
         if (!isCorrectTags) {
-            throw new InvalidEntityException("Invalid tags data.");
+            throw new InvalidEntityException("tag.invalid");
         }
     }
 
     private void validateSortParams(SortParamsContext sortParameters) {
         if (!sortParametersValidator.isValid(sortParameters)) {
-            throw new InvalidParametersException("Invalid sort parameters.");
+            throw new InvalidParametersException("sort.params.invalid");
         }
     }
 }

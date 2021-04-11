@@ -30,13 +30,13 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public long create(Tag tag) {
         if (!tagValidator.isValid(tag)) {
-            throw new InvalidEntityException("Invalid tag data.");
+            throw new InvalidEntityException("tag.invalid");
         }
         String tagName = tag.getName();
         boolean isTagExist = tagDao.findByName(tagName).isPresent();
         if (isTagExist) {
             throw new DuplicateEntityException
-                    ("Tag with name='" + tagName + "' is already exist.");
+                    ("tag.already.exist");
         }
         tagDao.create(tag);
         Optional<Tag> optionalTag = tagDao.findByName(tagName);
@@ -53,7 +53,7 @@ public class TagServiceImpl implements TagService {
     public Tag getById(long id) {
         Optional<Tag> optionalTag = tagDao.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new NoSuchEntityException("No tag with id='" + id + "'");
+            throw new NoSuchEntityException("tag.not.found");
         }
         return optionalTag.get();
     }
@@ -63,7 +63,7 @@ public class TagServiceImpl implements TagService {
     public void deleteById(long id) {
         Optional<Tag> optionalTag = tagDao.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new NoSuchEntityException("No tag with id='" + id + "'");
+            throw new NoSuchEntityException("tag.not.found");
         }
         tagDao.deleteById(id);
     }

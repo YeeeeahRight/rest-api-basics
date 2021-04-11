@@ -34,6 +34,16 @@ public class GiftCertificateController {
         return giftCertificateService.getAll();
     }
 
+    @GetMapping("/with_tags")
+    @ResponseStatus(HttpStatus.OK)
+    public List<GiftCertificateDto> getAllWithTags(
+            @RequestParam(name = "tag_name", required = false) String tagName,
+            @RequestParam(name = "part_info", required = false) String partInfo,
+            @RequestParam(name = "sort", required = false) List<String> sortColumns,
+            @RequestParam(name = "order", required = false) List<String> orderTypes) {
+        return giftCertificateService.getAllWithTags(tagName, partInfo, sortColumns, orderTypes);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GiftCertificate getById(@PathVariable("id") long id) {
@@ -45,16 +55,6 @@ public class GiftCertificateController {
     public GiftCertificateDto updateById(@PathVariable("id") long id,
                                       @RequestBody GiftCertificateDto giftCertificateDto) {
         return giftCertificateService.updateById(id, giftCertificateDto);
-    }
-
-    @GetMapping("/with_tags")
-    @ResponseStatus(HttpStatus.OK)
-    public List<GiftCertificateDto> getAllWithTags(
-            @RequestParam(name = "tag_name", required = false) String tagName,
-            @RequestParam(name = "part_info", required = false) String partInfo,
-            @RequestParam(name = "sort", required = false) List<String> sortColumns,
-            @RequestParam(name = "order", required = false) List<String> orderTypes) {
-        return giftCertificateService.getAllWithTags(tagName, partInfo, sortColumns, orderTypes);
     }
 
     @DeleteMapping("/{id}")

@@ -19,80 +19,72 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class GlobalExceptionControllerAdviser {
 
+    private ResponseEntity<ExceptionResponse> handleException(String message, int code, HttpStatus status) {
+        ExceptionResponse response = new ExceptionResponse(message, code);
+        return new ResponseEntity<>(response, status);
+    }
+
     @ExceptionHandler(DuplicateEntityException.class)
     public ResponseEntity<ExceptionResponse> handleDuplicateEntityException(
             DuplicateEntityException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40901);
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return handleException(e.getMessage(), 40901, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InvalidEntityException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidEntityExceptionException(
             InvalidEntityException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 42201);
-        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+        return handleException(e.getMessage(), 42201, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(TypeMismatchException.class)
     public ResponseEntity<ExceptionResponse> handleTypeMismatchException(TypeMismatchException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40000);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return handleException(e.getMessage(), 40000, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionResponse> handleNotReadableBodyException() {
-        ExceptionResponse response = new ExceptionResponse(
-                "Required request body data is missing.", 40001);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return handleException( "Required request body data is missing.", 40001, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchEntityException(MissingServletRequestParameterException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40002);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return handleException(e.getMessage(), 40002, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidParametersException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidParametersException(InvalidParametersException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40003);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return handleException(e.getMessage(), 40003, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ExceptionResponse> handleMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40500);
-        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+        return handleException(e.getMessage(), 40500, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNoFoundException(NoHandlerFoundException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40400);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return handleException(e.getMessage(), 40400, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoSuchEntityException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchEntityException(NoSuchEntityException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 40401);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return handleException(e.getMessage(), 40401, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ConversionNotSupportedException.class)
     public ResponseEntity<ExceptionResponse> handleNoFoundException(ConversionNotSupportedException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 50001);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return handleException(e.getMessage(), 50001, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpMessageNotWritableException.class)
     public ResponseEntity<ExceptionResponse> handleNoFoundException(HttpMessageNotWritableException e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 50002);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return handleException(e.getMessage(), 50002, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleNoFoundException(Exception e) {
-        ExceptionResponse response = new ExceptionResponse(e.getMessage(), 50000);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return handleException(e.getMessage(), 50000, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

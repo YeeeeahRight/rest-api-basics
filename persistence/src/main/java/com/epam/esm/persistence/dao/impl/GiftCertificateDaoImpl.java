@@ -3,9 +3,9 @@ package com.epam.esm.persistence.dao.impl;
 import com.epam.esm.persistence.dao.AbstractDao;
 import com.epam.esm.persistence.dao.GiftCertificateDao;
 import com.epam.esm.persistence.entity.GiftCertificate;
-import com.epam.esm.persistence.query.Query;
+import com.epam.esm.persistence.contstant.Query;
 import com.epam.esm.persistence.query.QueryBuildHelper;
-import com.epam.esm.persistence.query.SortParameters;
+import com.epam.esm.persistence.query.SortParamsContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -55,7 +55,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
-    public List<GiftCertificate> getAllWithSorting(SortParameters sortParameters) {
+    public List<GiftCertificate> getAllWithSorting(SortParamsContext sortParameters) {
         String query = getAllQuery + " " + queryBuildHelper.buildSortingQuery(sortParameters);
         return jdbcTemplate.query(query, ROW_MAPPER);
     }
@@ -89,7 +89,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
-    public List<GiftCertificate> getAllWithSortingFiltering(SortParameters sortParameters,
+    public List<GiftCertificate> getAllWithSortingFiltering(SortParamsContext sortParameters,
                                                             List<Long> ids, String partInfo) {
         List<Object> values = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder();

@@ -3,7 +3,7 @@ package com.epam.esm.persistence.dao.impl;
 import com.epam.esm.persistence.dao.AbstractDao;
 import com.epam.esm.persistence.dao.TagDao;
 import com.epam.esm.persistence.entity.Tag;
-import com.epam.esm.persistence.query.Query;
+import com.epam.esm.persistence.contstant.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

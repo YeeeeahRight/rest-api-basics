@@ -41,7 +41,7 @@ public class QueryBuildHelper {
         return queryBuilder.toString();
     }
 
-    public String buildSortingQuery(SortParameters sortParameters) {
+    public String buildSortingQuery(SortParamsContext sortParameters) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("ORDER BY ");
         List<String> sortColumns = convertToDBFields(sortParameters.getSortColumns());

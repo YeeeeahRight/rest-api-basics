@@ -53,7 +53,7 @@ public class TagServiceImpl implements TagService {
     public Tag getById(long id) {
         Optional<Tag> optionalTag = tagDao.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new NoSuchEntityException("No tag with id=" + id + ".");
+            throw new NoSuchEntityException("No tag with id='" + id + "'");
         }
         return optionalTag.get();
     }
@@ -63,7 +63,7 @@ public class TagServiceImpl implements TagService {
     public void deleteById(long id) {
         Optional<Tag> optionalTag = tagDao.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new NoSuchEntityException("No tag with id=" + id + ".");
+            throw new NoSuchEntityException("No tag with id='" + id + "'");
         }
         tagDao.deleteById(id);
     }

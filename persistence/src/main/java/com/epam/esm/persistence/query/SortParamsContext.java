@@ -2,11 +2,11 @@ package com.epam.esm.persistence.query;
 
 import java.util.List;
 
-public class SortParameters {
+public class SortParamsContext {
     private final List<String> sortColumns;
     private final List<String> orderTypes;
 
-    public SortParameters(List<String> sortColumns, List<String> orderTypes) {
+    public SortParamsContext(List<String> sortColumns, List<String> orderTypes) {
         this.sortColumns = sortColumns;
         this.orderTypes = orderTypes;
     }

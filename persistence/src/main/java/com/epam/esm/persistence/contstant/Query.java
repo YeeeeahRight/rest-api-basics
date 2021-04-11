@@ -1,4 +1,4 @@
-package com.epam.esm.persistence.query;
+package com.epam.esm.persistence.contstant;
 
 public final class Query {
     public static final String CREATE_CERTIFICATE = "INSERT INTO certificate" +

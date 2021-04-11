@@ -4,7 +4,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-//instead of WebAppInitializer
 public class SpringDispatcherServletInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {
 

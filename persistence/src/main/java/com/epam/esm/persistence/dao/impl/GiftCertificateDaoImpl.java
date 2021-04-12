@@ -12,13 +12,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.util.*;
 
 @Component
 public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements GiftCertificateDao {
     private static final String TABLE_NAME = "certificate";
     private static final RowMapper<GiftCertificate> ROW_MAPPER =
-            new BeanPropertyRowMapper<>(GiftCertificate.class);
+            (rs, rowNum) -> new GiftCertificate(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            rs.getBigDecimal("price"),
+            rs.getTimestamp("create_date").toLocalDateTime().atZone(ZoneId.of("GMT+3")),
+            rs.getTimestamp("last_update_date").toLocalDateTime().atZone(ZoneId.of("GMT+3")),
+            rs.getInt("duration"));
 
     private final JdbcTemplate jdbcTemplate;
     private final QueryBuildHelper queryBuildHelper;

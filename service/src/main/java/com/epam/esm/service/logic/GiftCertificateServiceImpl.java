@@ -48,7 +48,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new DuplicateEntityException("certificate.already.exist");
         }
         giftCertificateDao.create(giftCertificate);
-        long certificateId = giftCertificateDao.findByName(certificateName).get().getId();
+        long certificateId = giftCertificateDao.findByName(certificateName)
+                .map(GiftCertificate::getId).orElse(-1L);
         createCertificateTagsWithReference(giftCertificateDto.getCertificateTags(), certificateId);
         return certificateId;
     }
@@ -153,7 +154,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (tags != null) {
             updateCertificateTags(tags, id);
         }
-        return buildGiftCertificateDto(giftCertificate);
+        return buildGiftCertificateDto(giftCertificateDao.findById(id).get());
     }
 
     private Map<String, Object> findUpdateInfo(GiftCertificate giftCertificate) {

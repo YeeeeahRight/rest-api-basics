@@ -6,7 +6,6 @@ import com.epam.esm.service.exception.InvalidEntityException;
 import com.epam.esm.service.exception.NoSuchEntityException;
 import com.epam.esm.service.exception.DuplicateEntityException;
 import com.epam.esm.service.validator.Validator;
-import com.epam.esm.service.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ public class TagServiceImpl implements TagService {
     private final Validator<Tag> tagValidator;
 
     @Autowired
-    public TagServiceImpl(TagDao tagDao, TagValidator tagValidator) {
+    public TagServiceImpl(TagDao tagDao, Validator<Tag> tagValidator) {
         this.tagDao = tagDao;
         this.tagValidator = tagValidator;
     }
@@ -35,8 +34,7 @@ public class TagServiceImpl implements TagService {
         String tagName = tag.getName();
         boolean isTagExist = tagDao.findByName(tagName).isPresent();
         if (isTagExist) {
-            throw new DuplicateEntityException
-                    ("tag.already.exist");
+            throw new DuplicateEntityException("tag.already.exist");
         }
         tagDao.create(tag);
         Optional<Tag> optionalTag = tagDao.findByName(tagName);

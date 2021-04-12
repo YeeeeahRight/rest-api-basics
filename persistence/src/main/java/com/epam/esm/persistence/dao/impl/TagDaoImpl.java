@@ -14,7 +14,7 @@ import java.util.*;
 
 @Component
 public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
-    private static final String TABLE_NAME = "tag";
+    private static final String TABLE_NAME = "tags";
     private static final RowMapper<Tag> ROW_MAPPER = new BeanPropertyRowMapper<>(Tag.class);
     private final JdbcTemplate jdbcTemplate;
 

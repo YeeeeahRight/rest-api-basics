@@ -17,7 +17,7 @@ import java.util.*;
 
 @Component
 public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements GiftCertificateDao {
-    private static final String TABLE_NAME = "certificate";
+    private static final String TABLE_NAME = "certificates";
     private static final RowMapper<GiftCertificate> ROW_MAPPER =
             (rs, rowNum) -> new GiftCertificate(
             rs.getLong("id"),
@@ -117,7 +117,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     public void updateById(long id, Map<String, Object> giftCertificateUpdateInfo) {
         if (!giftCertificateUpdateInfo.isEmpty()) {
             StringBuilder updateQueryBuilder = new StringBuilder();
-            updateQueryBuilder.append("UPDATE certificate SET last_update_date=NOW(), ");
+            updateQueryBuilder.append("UPDATE certificates SET last_update_date=NOW(), ");
             String updateColumnsQuery = queryBuildHelper.buildUpdateColumnsQuery(
                     giftCertificateUpdateInfo.keySet());
             updateQueryBuilder.append(updateColumnsQuery);
